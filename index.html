@@ -1,0 +1,192 @@
+<head>
+    <title>Equation solver</title>
+
+    <body>
+        <script>
+
+            function isValid(equation){
+                var stack=[];
+                for(var i in equation){
+                    if(equation[i]=='[' || equation[i]=='{' || equation[i]=='(' ){
+                        stack.push(equation[i]);
+                    }
+                    else if(equation[i]==']'){
+                        if(stack[stack.length-1]!='[')
+                            return false;
+                        else
+                            stack.pop();
+                    }
+                    else if(equation[i]=='}'){
+                        if(stack[stack.length-1]!='{')
+                            return false;
+                        else
+                            stack.pop();
+                    }
+                    else if(equation[i]==')'){
+                        if(stack[stack.length-1]!='(')
+                            return false;
+                        else
+                            stack.pop();
+                    }
+                    else if(equation[i]=='+' || equation[i]=='-' || equation[i]=='*' || equation[i]=='/'){
+                        i++;
+                        if(equation[i] && (equation[i]=='+' || equation[i]=='-' || equation[i]=='*' || equation[i]=='/')){
+                            return false;
+                        }
+                        i--;
+                    }
+                    
+                }
+                return stack.length==0;
+            }
+            
+
+
+            function solve(equation){
+                var expression = equation.split('=');
+                var x = [0,0,0,0];
+                 if(expression.length!=2)
+                     return false;
+                 if(isValid(expression[0]) && isValid(expression[1])){
+                     var left = expression[0];
+                     var stack=[];
+                     var adders = [];
+                     var subs = [];
+                     var current = '+';
+                     for(var i in left){
+                         if(left[i]=='+'){
+                             var temp = "";
+                             
+                             for(var j in stack){
+                                 temp+=stack[j];
+                             }
+                             if(current=='+')
+                                adders.push(temp);
+                            else
+                                subs.push(temp);
+                            current = '+';
+                             stack=[];
+                             temp=null;
+                         }
+                         else if(left[i]=='-'){
+                             var temp = "";
+                             
+                             for(var j in stack){
+                                 temp+=stack[j];
+                             }
+                             if(current=='+')
+                                adders.push(temp);
+                            else
+                                subs.push(temp);
+                            current = '-';
+                                stack=[];
+                             temp=null;
+                             stack=[];
+                             temp=null;
+                         }
+                         else{
+                             stack.push(left[i]);
+                         }
+                     }
+                     var temp = "";
+                     for(var j in stack){
+                         temp+=stack[j];
+                    }
+                     if(current=='+')
+                        adders.push(temp);
+                    else
+                        subs.push(temp);
+                     for(var i in subs){
+                         if(adders[i].indexOf('x^3')!==-1){
+                             var exp = adders[i].split('x^3');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[3]-=exp;
+                         }
+                         else if(adders[i].indexOf('x^2')!==-1){
+                             var exp = adders[i].split('x^2');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[2]-=exp;
+                         }
+                         else if(adders[i].indexOf('x^1')!==-1){
+                             var exp = adders[i].split('x^1');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[1]-=exp;
+                         }
+                         else if(adders[i].indexOf('x')!==-1){
+                             var exp = adders[i].split('x');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[1]-=exp;
+                         }
+                         else{
+                             x[0] += adders[i];
+                         }
+                     }
+                     for(var i in adders){
+                         if(adders[i].indexOf('x^3')!==-1){
+                             var exp = adders[i].split('x^3');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[3]-=exp;
+                         }
+                         else if(adders[i].indexOf('x^2')!==-1){
+                             var exp = adders[i].split('x^2');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[2]-=exp;
+                         }
+                         else if(adders[i].indexOf('x^1')!==-1){
+                             var exp = adders[i].split('x^1');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[1]-=exp;
+                         }
+                         else if(adders[i].indexOf('x')!==-1){
+                             var exp = adders[i].split('x');
+                             if(exp[0]=="")
+                                exp=1;
+                            exp=exp[0];
+                            x[1]-=exp;
+                         }
+                         else{
+                             x[0] -= adders[i];
+                         }
+                     }
+                    //  left = left.split('-');
+                    //  for(var i in left){
+                    //      left[i] = left[i].split('+');
+                    //      for(var j in left[i]){
+                    //          left[i][j] = left[i][j].split('*');
+                    //          for(var k in left[i][j]){
+                    //              left[i][j][k]=left[i][j][k].split('/');
+                    //          }
+                    //      }
+                    //  }
+                     var temp = left;
+                    //  for(var i in left){
+                         
+                    //     //  if(left[i]=='/'){
+                    //     //      if(left[i-3] && left[i-2]=='^' && left[i-3]=='x'){
+                    //     //         x[left[i]] /= left[i-1];
+                    //     //      }
+                    //     //      else{
+                                 
+                    //     //      }
+                    //     //  }
+                    //  }
+                 }
+            }
+            solve("x^2+10x^1+10-2x^2=10");
+        </script>
+    </body>
+</head>
